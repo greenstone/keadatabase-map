@@ -1,24 +1,11 @@
 import React, { Component } from 'react';
-import { Map, TileLayer, GeoJSON } from 'react-leaflet'
 import { connect } from 'react-refetch'
+import { GeoJSONLayer } from 'react-mapbox-gl';
 
-import 'leaflet/dist/leaflet.css'
-import L from "leaflet";
-import 'leaflet/dist/leaflet'
-import icon from 'leaflet/dist/images/marker-icon.png'
-import iconRetina from 'leaflet/dist/images/marker-icon-2x.png'
-import iconShadow from 'leaflet/dist/images/marker-shadow.png'
+import Map from './Map';
+import './assets/App.css';
 
-import './App.css';
-
-// Leaflet marker fix
-let DefaultIcon = L.icon({
-    iconUrl: icon,
-    iconRetinaUrl: iconRetina,
-    shadowUrl: iconShadow
-});
-
-L.Marker.prototype.options.icon = DefaultIcon
+import fwf_blocks from './assets/fwf_blocks.geojson';
 
 class App extends Component {
   render() {
@@ -32,16 +19,32 @@ class App extends Component {
     }
     else if (sightingsFetch.fulfilled) {
       const data = sightingsFetch.value
-      return <>
-          <Map center={[-43.983333, 170.45]} zoom={7} id="map">
-            <GeoJSON
-              data={data} />
-            <TileLayer
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
+      return (
+        <>
+          <Map>
+            <GeoJSONLayer
+              data={ data }
+              type='symbol'
+              symbolLayout={{ 'icon-image': 'circle-15', 'icon-allow-overlap': true }}
             />
-        </Map>
-      </>
+            <GeoJSONLayer
+              data={ fwf_blocks }
+              type='fill'
+              fillPaint={{
+                'fill-color': 'rgba(255,255,0,0.1)'
+              }}
+            />
+            <GeoJSONLayer
+              data={ fwf_blocks }
+              type='line'
+              linePaint={{
+                'line-color': 'rgba(255,255,0,1)',
+                'line-width': 2
+              }}
+            />
+          </Map>
+        </>
+      );
     }
   }
 }
