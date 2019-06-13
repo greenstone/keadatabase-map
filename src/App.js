@@ -8,7 +8,6 @@ import Map from './Map';
 import './assets/App.css';
 
 const defaultPointMarkerOptions = {
-    radius: 6,
     color: "#000",
     weight: 1,
     opacity: 1,
@@ -19,16 +18,31 @@ class App extends Component {
   sightingPointToLayer(feature, latlng) {
     var pointMarkerOptions = defaultPointMarkerOptions;
 
+    // Color based on status
     switch (feature.properties.status) {
       case 'public': pointMarkerOptions.fillColor = "#df5206"; break;
       case 'new': pointMarkerOptions.fillColor = "#ffffff"; break;
       default: pointMarkerOptions.fillColor = "#000000";
     }
 
+    // Radius based on number
+
+    if (feature.properties.number > 10) pointMarkerOptions.radius = 10;
+    else if (feature.properties.number > 5 && feature.properties.number <= 10) pointMarkerOptions.radius = 7;
+    else pointMarkerOptions.radius = 5;
+
     return L.circleMarker(
       latlng,
       pointMarkerOptions
     );
+  }
+
+  sightingOnEachFeature(feature, layer) {
+    layer.bindPopup(`
+      <a href="https://keadatabase.nz/sightings/${feature.id}" rel="noopener noreferrer" target="_blank">
+        <strong>${feature.id}</strong>: ${feature.properties.get_sighting_type_display} ${feature.properties.number} on ${feature.properties.date_sighted}
+      </a>
+    `);
   }
 
   render() {
@@ -43,14 +57,13 @@ class App extends Component {
     else if (sightingsFetch.fulfilled) {
       const data = sightingsFetch.value
       return (
-        <>
-          <Map>
-            <GeoJSON
-              data={ data }
-              pointToLayer={this.sightingPointToLayer}
-              />
-          </Map>
-        </>
+        <Map>
+          <GeoJSON
+            data={ data }
+            pointToLayer={this.sightingPointToLayer}
+            onEachFeature={this.sightingOnEachFeature}
+            />
+        </Map>
       );
     }
   }
