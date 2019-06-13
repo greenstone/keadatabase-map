@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { connect } from 'react-refetch'
 import L from 'leaflet';
+import { connect } from 'react-refetch'
 import { GeoJSON, LayersControl, ScaleControl } from 'react-leaflet';
 
 import Loader from './helpers/Loader';

@@ -4,11 +4,6 @@ import { Map as LeafletMap, TileLayer } from 'react-leaflet';
 // Import CSS from Leaflet and plugins.
 import 'leaflet/dist/leaflet.css';
 
-// Import images directly that got missed via the CSS imports above.
-import 'leaflet/dist/images/marker-icon.png';
-import 'leaflet/dist/images/marker-icon-2x.png';
-import 'leaflet/dist/images/marker-shadow.png';
-
 // Import JS from Leaflet and plugins.
 import 'leaflet/dist/leaflet';
 
