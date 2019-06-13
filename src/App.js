@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-refetch'
 import L from 'leaflet';
-import { GeoJSON } from 'react-leaflet';
+import { GeoJSON, LayersControl, ScaleControl } from 'react-leaflet';
 
 import Loader from './helpers/Loader';
 import Map from './Map';
@@ -58,11 +58,16 @@ class App extends Component {
       const data = sightingsFetch.value
       return (
         <Map>
-          <GeoJSON
-            data={ data }
-            pointToLayer={this.sightingPointToLayer}
-            onEachFeature={this.sightingOnEachFeature}
-            />
+          <LayersControl position="topright" collapsed={false}>
+            <LayersControl.Overlay name="<strong>Sightings</strong>" checked>
+              <GeoJSON
+                data={ data }
+                pointToLayer={this.sightingPointToLayer}
+                onEachFeature={this.sightingOnEachFeature}
+                />
+            </LayersControl.Overlay>
+          </LayersControl>
+          <ScaleControl />
         </Map>
       );
     }
