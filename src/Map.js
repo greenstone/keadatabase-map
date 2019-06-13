@@ -1,69 +1,47 @@
 import React, { Component } from 'react';
-import ReactMapboxGl, { Layer, Source, ZoomControl } from "react-mapbox-gl";
+import { Map as LeafletMap, TileLayer } from 'react-leaflet';
 
-import 'mapbox-gl/dist/mapbox-gl.css';
+// Import CSS from Leaflet and plugins.
+import 'leaflet/dist/leaflet.css';
 
-const MapboxMap = ReactMapboxGl({
-  accessToken: process.env.REACT_APP_MAPBOX_API_KEY,
-  minZoom: 5.2,
-  maxZoom: 15
-});
+// Import images directly that got missed via the CSS imports above.
+import 'leaflet/dist/images/marker-icon.png';
+import 'leaflet/dist/images/marker-icon-2x.png';
+import 'leaflet/dist/images/marker-shadow.png';
 
-const RASTER_SOURCE_OPTIONS = {
-  "type": "raster",
-  "tiles": [
-    `https://tiles-a.data-cdn.linz.govt.nz/services;key=${process.env.REACT_APP_LINZ_API_KEY}/tiles/v4/layer=50767/EPSG:3857/{z}/{x}/{y}.png`
-  ],
-  "tileSize": 256
-};
-
+// Import JS from Leaflet and plugins.
+import 'leaflet/dist/leaflet';
 
 class Map extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      center: props.center || [170.45, -43.983333],
-      zoom: props.zoom || [5.2],
+      lat: props.lat || -43.983333,
+      lng: props.lng || 170.45,
+      zoom: props.zoom || 7,
     };
   }
 
-  componentDidUpdate(prevProps) {
-    // Update center of the map but not when center is unset
-    if (this.props.center && this.props.center !== prevProps.center) {
-      this.setState({
-        center: this.props.center
-      });
-    }
-  }
-
   render() {
-    const { onClick, children } = this.props;
+    const { children } = this.props;
     return (
-      <MapboxMap
-        style="mapbox://styles/mapbox/outdoors-v9"
-        containerStyle={{
-          height: "100%",
-          width: "100%",
-        }}
-        center={ this.state.center }
-        zoom={ this.state.zoom }
-        onClick={onClick}
-      >
-        <ZoomControl
-          zoomDiff={1}
+      <LeafletMap
+        className="map"
+        center={[this.state.lat, this.state.lng]}
+        zoom={this.state.zoom}
+        minZoom={7}
+        maxZoom={14}>
+        <TileLayer
+          attribution="Mapbox"
+          url={`https://api.mapbox.com/styles/v1/mapbox/outdoors-v9/tiles/256/{z}/{x}/{y}?access_token=${process.env.REACT_APP_MAPBOX_API_KEY}`}
         />
-        <Source
-          id="topo50"
-          tileJsonSource={RASTER_SOURCE_OPTIONS}
+         <TileLayer
+          url={`https://tiles-a.data-cdn.linz.govt.nz/services;key=${process.env.REACT_APP_LINZ_API_KEY}/tiles/v4/layer=50767/EPSG:3857/{z}/{x}/{y}.png`}
+          attribution="LINZ, licensed for reuse under the CC BY 4.0."
+          minZoom={11}
         />
-        <Layer
-          id="topo50"
-          type="raster"
-          sourceId="topo50"
-          minZoom={ 11 }
-        />
-        { children }
-      </MapboxMap>
+       { children }
+      </LeafletMap>
     );
   }
 }

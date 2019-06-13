@@ -1,18 +1,41 @@
 import React, { Component } from 'react';
 import { connect } from 'react-refetch'
-import { GeoJSONLayer } from 'react-mapbox-gl';
+import L from 'leaflet';
+import { GeoJSON } from 'react-leaflet';
 
+import Loader from './helpers/Loader';
 import Map from './Map';
 import './assets/App.css';
 
-import fwf_blocks from './assets/fwf_blocks.geojson';
+const defaultPointMarkerOptions = {
+    radius: 6,
+    color: "#000",
+    weight: 1,
+    opacity: 1,
+    fillOpacity: 0.8
+};
 
 class App extends Component {
+  sightingPointToLayer(feature, latlng) {
+    var pointMarkerOptions = defaultPointMarkerOptions;
+
+    switch (feature.properties.status) {
+      case 'public': pointMarkerOptions.fillColor = "#df5206"; break;
+      case 'new': pointMarkerOptions.fillColor = "#ffffff"; break;
+      default: pointMarkerOptions.fillColor = "#000000";
+    }
+
+    return L.circleMarker(
+      latlng,
+      pointMarkerOptions
+    );
+  }
+
   render() {
     const { sightingsFetch } = this.props
 
     if (sightingsFetch.pending) {
-      return <span>Loading</span>
+      return <Loader />
     }
     else if (sightingsFetch.rejected) {
       return <span>Error</span>
@@ -22,26 +45,10 @@ class App extends Component {
       return (
         <>
           <Map>
-            <GeoJSONLayer
+            <GeoJSON
               data={ data }
-              type='symbol'
-              symbolLayout={{ 'icon-image': 'circle-15', 'icon-allow-overlap': true }}
-            />
-            <GeoJSONLayer
-              data={ fwf_blocks }
-              type='fill'
-              fillPaint={{
-                'fill-color': 'rgba(255,255,0,0.1)'
-              }}
-            />
-            <GeoJSONLayer
-              data={ fwf_blocks }
-              type='line'
-              linePaint={{
-                'line-color': 'rgba(255,255,0,1)',
-                'line-width': 2
-              }}
-            />
+              pointToLayer={this.sightingPointToLayer}
+              />
           </Map>
         </>
       );
