@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import L from 'leaflet';
-import { connect } from 'react-refetch';
+import { connect, PromiseState } from 'react-refetch';
 import { GeoJSON, LayersControl, ScaleControl } from 'react-leaflet';
 
 import Loader from './helpers/Loader';
 import Map from './Map';
+
 import './assets/css/App.css';
 
 const defaultPointMarkerOptions = {
@@ -49,20 +50,29 @@ class App extends Component {
   }
 
   render() {
-    const { sightingsFetch } = this.props;
+    const { publicSightingsFetch, newSightingsFetch } = this.props;
 
-    if (sightingsFetch.pending) {
+    const allFetches = PromiseState.all([publicSightingsFetch, newSightingsFetch]);
+
+    if (allFetches.pending) {
       return <Loader />;
-    } else if (sightingsFetch.rejected) {
+    } else if (allFetches.rejected) {
       return <span>Error</span>;
-    } else if (sightingsFetch.fulfilled) {
-      const data = sightingsFetch.value;
+    } else if (allFetches.fulfilled) {
+      const [publicSightings, newSightings] = allFetches.value;
       return (
         <Map>
           <LayersControl position="topright" collapsed={false}>
-            <LayersControl.Overlay name="<strong>Sightings</strong>" checked>
+            <LayersControl.Overlay name="Public Sightings" checked>
               <GeoJSON
-                data={data}
+                data={publicSightings}
+                pointToLayer={this.sightingPointToLayer}
+                onEachFeature={this.sightingOnEachFeature}
+              />
+            </LayersControl.Overlay>
+            <LayersControl.Overlay name="New Sightings" checked>
+              <GeoJSON
+                data={newSightings}
                 pointToLayer={this.sightingPointToLayer}
                 onEachFeature={this.sightingOnEachFeature}
               />
@@ -76,5 +86,6 @@ class App extends Component {
 }
 
 export default connect(props => ({
-  sightingsFetch: `https://data.keadatabase.nz/geojson/sightings/?page_size=10000`,
+  publicSightingsFetch: `https://data.keadatabase.nz/geojson/sightings/?status=public&page_size=10000`,
+  newSightingsFetch: `https://data.keadatabase.nz/geojson/sightings/?status=new&page_size=10000`,
 }))(App);
