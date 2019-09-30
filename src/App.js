@@ -8,6 +8,8 @@ import Map from './Map';
 
 import './assets/css/App.css';
 
+const API_URL = `https://data.keadatabase.nz/geojson/sightings/`;
+
 const defaultPointMarkerOptions = {
   color: '#000',
   weight: 1,
@@ -86,6 +88,6 @@ class App extends Component {
 }
 
 export default connect(props => ({
-  publicSightingsFetch: `https://data.keadatabase.nz/geojson/sightings/?status=public&page_size=10000`,
-  newSightingsFetch: `https://data.keadatabase.nz/geojson/sightings/?status=new&page_size=10000`,
+  publicSightingsFetch: `${API_URL}?status=public&page_size=10000`,
+  newSightingsFetch: `${API_URL}?status=new&page_size=10000`,
 }))(App);
