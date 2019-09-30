@@ -22,7 +22,9 @@ To build the app for production use, run:
 - `public/` Static HTML files included in build
 - `src/` Main source code
   - `assets/` Static assets, including SCSS, grid tiles JSON and logos/banners
-  - `helpers/` Various helper components, such as loading spinners
+  - `components` View and form components
+    - `helpers/` Various helper components, such as loading spinners
+    - `map/` Map components and logic
 
 ## Deploying
 
