@@ -1,11 +1,31 @@
 import React from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
-import GeoJSONMap from './components/map/GeoJSONMap';
+import MapContainer from './components/map/MapContainer';
+import Header from './components/presentation/Header';
+import NoMatchPage from './views/nomatch';
 
-import './assets/css/App.css';
-
+/**
+  Main App component. Shows MapContainer on both / and /embed, only shows Header on /.
+ */
 const App = () => {
-  return <GeoJSONMap />;
+  return (
+    <Router>
+      <div className="App">
+        <Route exact path="/" component={Header} />
+        <Switch>
+          <Route exact path="/">
+            <MapContainer />
+          </Route>
+          <Route exact path="/embed">
+            <MapContainer embed />
+          </Route>
+
+          <Route component={NoMatchPage} />
+        </Switch>
+      </div>
+    </Router>
+  );
 };
 
 export default App;

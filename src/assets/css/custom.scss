@@ -1,0 +1,23 @@
+@import 'variables';
+@import 'node_modules/bootstrap/scss/bootstrap';
+
+$nav-height: $navbar-brand-font-size * $line-height-base + $nav-link-padding-y * 2 +
+  $navbar-brand-padding-y * 2;
+
+html,
+body,
+div.map,
+div#root,
+div.App,
+div.MapContainer {
+  width: 100%;
+  height: 100%;
+}
+div.MapContainer {
+  &.index {
+    padding-top: $nav-height;
+  }
+  &.embed {
+    margin-top: 0;
+  }
+}
