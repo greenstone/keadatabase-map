@@ -38,6 +38,10 @@ To deploy to Amazon S3 (and hence make available online):
 
 **This will automatically build the source code, and then invalidate the CloudFront cache.**
 
+## Bug reports
+
+Should be filed on the Kea Database Trello board (not presently public)
+
 ## Licence
 
 Kea Survey Tool  
