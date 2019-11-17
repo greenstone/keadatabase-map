@@ -1,7 +1,9 @@
+@import 'variables';
+
 .Loader {
   margin: 20px auto;
-  border: 8px solid #dee2e6;
-  border-top: 8px solid #007bff;
+  border: 8px solid $gray-300;
+  border-top: 8px solid $primary;
   border-radius: 50%;
   width: 40px;
   height: 40px;

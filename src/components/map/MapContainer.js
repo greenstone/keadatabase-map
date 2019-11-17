@@ -1,45 +1,41 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import qs from 'qs';
+import { withRouter } from 'react-router-dom';
 
-import GeoJSONMap from './GeoJSONMap';
-
-const qsOptions = {
-  encode: false,
-  arrayFormat: 'brackets',
-  ignoreQueryPrefix: true,
-  addQueryPrefix: true,
-  allowDots: true,
-};
+import qsOptions from '../../config/qsOptions';
+import ExtendedMap from './ExtendedMap';
+import defaultQuery from '../../config/defaultQuery';
 
 /**
-  MapContainer adds the additional handling of queryStrings to the GeoJSONMap component.
+  MapContainer encloses the ExtendedMap layer, adding the the additional handling of queryStrings,
+  and context aware CSS classes.
  */
 class MapContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      queryString: {},
+      queryObject: {},
     };
   }
 
-  updateStateFromQueryString() {
+  updateStateFromQueryObject() {
     // Store query string in state
-    if (this.props.location) {
-      this.setState({
-        queryString: qs.parse(this.props.location.search, qsOptions),
-      });
-    }
+    const queryString = this.props.location.search ? this.props.location.search : defaultQuery;
+
+    this.setState({
+      queryObject: qs.parse(queryString, qsOptions),
+    });
   }
 
   componentDidMount() {
     // Set state from and query string parameters passed on load
-    this.updateStateFromQueryString();
+    this.updateStateFromQueryObject();
   }
 
   componentDidUpdate(prevProps) {
     // If location changes, update state accordingly
-    if (this.props.location !== prevProps.location) this.updateStateFromQueryString();
+    if (this.props.location !== prevProps.location) this.updateStateFromQueryObject();
   }
 
   render() {
@@ -48,7 +44,7 @@ class MapContainer extends Component {
 
     return (
       <div className={classes}>
-        <GeoJSONMap queryString={this.state.queryString} />
+        <ExtendedMap queryObject={this.state.queryObject} />
       </div>
     );
   }
@@ -56,10 +52,11 @@ class MapContainer extends Component {
 
 MapContainer.propTypes = {
   embed: PropTypes.bool.isRequired,
+  'location.search': PropTypes.string,
 };
 
 MapContainer.defaultProps = {
   embed: false,
 };
 
-export default MapContainer;
+export default withRouter(MapContainer);

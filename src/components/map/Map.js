@@ -7,6 +7,10 @@ import 'leaflet/dist/leaflet.css';
 // Import JS from Leaflet and plugins.
 import 'leaflet/dist/leaflet';
 
+/**
+  Map is common across Kea Database projects, and builds on Leaflet to automatically include the 
+  Mapbox outdoors basemap and LINZ topographic tiles.
+ */
 class Map extends Component {
   constructor(props) {
     super(props);

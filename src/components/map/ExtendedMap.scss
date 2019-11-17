@@ -1,0 +1,16 @@
+@import 'variables';
+
+.MapContainer .information-box {
+  position: absolute;
+  display: block;
+  bottom: $grid-gutter-width;
+  right: $grid-gutter-width/2;
+  z-index: 10000;
+  background-color: $white;
+  border: $border-width solid $border-color;
+  padding: $spacer;
+  font-size: $font-size-sm;
+  h1 {
+    font-size: $h4-font-size;
+  }
+}
