@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom';
 
 import qsOptions from '../../config/qsOptions';
 import ExtendedMap from './ExtendedMap';
-import defaultQuery from '../../config/defaultQuery';
+import { defaultQuery } from '../../config/queries';
 
 /**
   MapContainer encloses the ExtendedMap layer, adding the the additional handling of queryStrings,

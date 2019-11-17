@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
 
+import { allQuery, fwfQuery } from '../../config/queries';
+
 const Header = props => {
   return (
     <header>
@@ -16,19 +18,12 @@ const Header = props => {
             </NavLink>
           </li>
           <li className="nav-item">
-            <NavLink
-              className="nav-link"
-              exact
-              to="/?layers[0][status]=new&layers[0][page_size]=10000&layers[0][label]=New Sightings&layers[1][status]=public&layers[1][page_size]=10000&layers[1][label]=Moderated Sightings&layers[2][label]=Captive Sightings&layers[2][status]=captive&layers[2][page_size]=10000"
-            >
+            <NavLink className="nav-link" exact to={allQuery}>
               All
             </NavLink>
           </li>
           <li className="nav-item">
-            <NavLink
-              className="nav-link"
-              to="/?layers[0][label]=FWF Sightings&layers[0][status]=fwf"
-            >
+            <NavLink className="nav-link" to={fwfQuery}>
               FWF
             </NavLink>
           </li>

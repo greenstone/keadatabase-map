@@ -9,7 +9,7 @@ import Loader from '../helpers/Loader';
 const API_URL = `https://data.keadatabase.nz/geojson/sightings/`;
 
 const defaultPointMarkerOptions = {
-  color: '#000',
+  color: '#333',
   weight: 1,
   opacity: 1,
   fillOpacity: 0.8,
@@ -27,10 +27,9 @@ class Layer extends Component {
   componentDidUpdate(prevProps) {
     if (this.props.queryString !== prevProps.queryString)
       this.props.lazyFetchLayer(this.props.queryString);
-  }
-
-  componentWillUnmount() {
-    console.log('Goodbye');
+    if (this.props.layerFetch !== prevProps.layerFetch) {
+      this.props.onLayerFetch({ [this.props.id]: this.props.layerFetch });
+    }
   }
 
   sightingPointToLayer(feature, latlng) {
@@ -43,6 +42,9 @@ class Layer extends Component {
         break;
       case 'new':
         pointMarkerOptions.fillColor = '#ffffff';
+        break;
+      case 'fwf':
+        pointMarkerOptions.fillColor = '#add8e6';
         break;
       default:
         pointMarkerOptions.fillColor = '#000000';
@@ -87,7 +89,9 @@ class Layer extends Component {
 }
 
 Layer.propTypes = {
+  id: PropTypes.string.isRequired,
   queryString: PropTypes.string.isRequired,
+  onLayerFetch: PropTypes.func.isRequired,
 };
 
 export default connect(props => ({
