@@ -9,15 +9,18 @@ body,
 div.map,
 div#root,
 div.App,
-div.MapContainer {
+div.Map {
   width: 100%;
   height: 100%;
 }
-div.MapContainer {
+div.Map {
   &.index {
     padding-top: $nav-height;
   }
   &.embed {
     margin-top: 0;
   }
+}
+.leaflet-control-layers label {
+  margin-bottom: 0;
 }
