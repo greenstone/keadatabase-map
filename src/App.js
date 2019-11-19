@@ -1,8 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
-import MapContainer from './components/map/MapContainer';
-import Header from './components/presentation/Header';
+import RecentSightingsMap from './components/map/views/RecentSightingsMap';
+import FWFMap from './components/map/views/FWFMap';
+import HelpPage from './views/help';
 import NoMatchPage from './views/nomatch';
 
 /**
@@ -12,13 +13,15 @@ const App = () => {
   return (
     <Router>
       <div className="App">
-        <Route exact path="/" component={Header} />
         <Switch>
           <Route exact path="/">
-            <MapContainer />
+            <RecentSightingsMap />
           </Route>
-          <Route exact path="/embed">
-            <MapContainer embed />
+          <Route exact path="/fwf">
+            <FWFMap />
+          </Route>
+          <Route exact path="/help">
+            <HelpPage />
           </Route>
 
           <Route component={NoMatchPage} />

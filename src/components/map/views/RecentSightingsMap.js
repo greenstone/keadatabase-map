@@ -3,8 +3,8 @@ import L from 'leaflet';
 import { connect, PromiseState } from 'react-refetch';
 import { GeoJSON, LayersControl, ScaleControl } from 'react-leaflet';
 
-import Loader from '../helpers/Loader';
-import Map from './Map';
+import Loader from '../../helpers/Loader';
+import Map from '../Map';
 
 const API_URL = `https://data.keadatabase.nz/geojson/sightings/`;
 
@@ -15,7 +15,7 @@ const defaultPointMarkerOptions = {
   fillOpacity: 0.8,
 };
 
-class GeoJSONMap extends Component {
+class RecentSightingsMap extends Component {
   sightingPointToLayer(feature, latlng) {
     var pointMarkerOptions = defaultPointMarkerOptions;
 
@@ -68,6 +68,7 @@ class GeoJSONMap extends Component {
                 data={publicSightings}
                 pointToLayer={this.sightingPointToLayer}
                 onEachFeature={this.sightingOnEachFeature}
+                attribution="Data: KSP, KCT"
               />
             </LayersControl.Overlay>
             <LayersControl.Overlay name="New Sightings" checked>
@@ -86,6 +87,6 @@ class GeoJSONMap extends Component {
 }
 
 export default connect(props => ({
-  publicSightingsFetch: `${API_URL}?status=public&page_size=10000`,
-  newSightingsFetch: `${API_URL}?status=new&page_size=10000`,
-}))(GeoJSONMap);
+  publicSightingsFetch: `${API_URL}?status=public`,
+  newSightingsFetch: `${API_URL}?status=new`,
+}))(RecentSightingsMap);
