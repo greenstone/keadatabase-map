@@ -6,6 +6,7 @@ import moment from 'moment';
 
 import Loader from '../../helpers/Loader';
 import Map from '../Map';
+import { FWF_BOUNDS } from '../defaults';
 
 import blocks from '../../../assets/geo/blocks.json';
 
@@ -114,7 +115,7 @@ class FWFMap extends Component {
     } else if (fwfSightingsFetch.fulfilled) {
       const fwfSightings = fwfSightingsFetch.value;
       return (
-        <Map lat={-44.93} lng={167.533} zoom={10.5}>
+        <Map bounds={FWF_BOUNDS}>
           <LayersControl position="topright" collapsed={false}>
             <LayersControl.Overlay name="FWF Blocks" checked>
               <GeoJSON

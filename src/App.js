@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import RecentSightingsMap from './components/map/views/RecentSightingsMap';
 import FWFMap from './components/map/views/FWFMap';
+import TrackBird from './components/map/views/TrackBird';
 import HelpPage from './views/help';
 import NoMatchPage from './views/nomatch';
 
@@ -23,7 +24,9 @@ const App = () => {
           <Route exact path="/help">
             <HelpPage />
           </Route>
-
+          <Route exact path="/track">
+            <TrackBird />
+          </Route>
           <Route component={NoMatchPage} />
         </Switch>
       </div>

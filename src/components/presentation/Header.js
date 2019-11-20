@@ -9,7 +9,7 @@ const Header = props => {
           Kea Map
         </Link>
 
-        <ul className="navbar-nav">
+        <ul className="navbar-nav mr-auto">
           <li className="nav-item">
             <NavLink className="nav-link" exact to="/">
               Home (Recent)

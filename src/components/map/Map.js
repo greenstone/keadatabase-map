@@ -3,9 +3,11 @@ import { Map as LeafletMap, TileLayer } from 'react-leaflet';
 import PropTypes from 'prop-types';
 import qs from 'qs';
 import { withRouter } from 'react-router-dom';
+import { latLngBounds } from 'leaflet';
 
 import Header from '../presentation/Header';
 import qsOptions from '../../config/qsOptions';
+import { DEFAULT_BOUNDS } from './defaults';
 
 // Import CSS/JS from Leaflet and plugins.
 import 'leaflet/dist/leaflet.css';
@@ -15,9 +17,7 @@ class Map extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      lat: props.lat || -43.983333,
-      lng: props.lng || 170.45,
-      zoom: props.zoom || 7,
+      bounds: props.bounds || DEFAULT_BOUNDS,
       queryObject: {},
     };
   }
@@ -31,14 +31,22 @@ class Map extends Component {
     });
   }
 
+  updateBounds() {
+    this.setState({
+      bounds: this.props.bounds,
+    });
+  }
+
   componentDidMount() {
     // Set state from and query string parameters passed on load
     this.updateStateFromQueryObject();
+    this.updateBounds();
   }
 
   componentDidUpdate(prevProps) {
     // If location changes, update state accordingly
     if (this.props.location !== prevProps.location) this.updateStateFromQueryObject();
+    if (this.props.bounds !== prevProps.bounds) this.updateBounds();
   }
 
   render() {
@@ -50,13 +58,7 @@ class Map extends Component {
       <>
         {!embed && <Header />}
         <div className={classes}>
-          <LeafletMap
-            className="map"
-            center={[this.state.lat, this.state.lng]}
-            zoom={this.state.zoom}
-            minZoom={7}
-            maxZoom={14}
-          >
+          <LeafletMap className="map" minZoom={7} maxZoom={14} bounds={this.state.bounds}>
             <TileLayer
               attribution="Mapbox"
               url={`https://api.mapbox.com/styles/v1/mapbox/outdoors-v9/tiles/256/{z}/{x}/{y}?access_token=${process.env.REACT_APP_MAPBOX_API_KEY}`}
@@ -76,9 +78,7 @@ class Map extends Component {
 
 Map.propTypes = {
   'location.search': PropTypes.string,
-  lon: PropTypes.number,
-  lat: PropTypes.number,
-  zoom: PropTypes.number,
+  bounds: PropTypes.object,
 };
 
 export default withRouter(Map);
