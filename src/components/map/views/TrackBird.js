@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import L from 'leaflet';
 import { connect } from 'react-refetch';
 import { GeoJSON as LeafletGeoJSON, latLngBounds } from 'leaflet';
-import { Polyline, GeoJSON, ScaleControl } from 'react-leaflet';
+import { Polyline, GeoJSON, LayersControl, ScaleControl } from 'react-leaflet';
 import { withRouter } from 'react-router-dom';
 
 import Loader from '../../helpers/Loader';
@@ -42,13 +42,19 @@ class BirdMap extends Component {
 
     return (
       <Map bounds={latLngBounds(birdTrace)}>
-        <Polyline positions={birdTrace} color="#000" weight={2} opacity={0.7} />
-        <GeoJSON
-          data={birdSightings}
-          pointToLayer={this.sightingPointToLayer}
-          onEachFeature={this.sightingOnEachFeature}
-          attribution="Data: FWF, KCT, KSP"
-        />
+        <LayersControl position="topright" collapsed={false}>
+          <LayersControl.Overlay name="Paths">
+            <Polyline positions={birdTrace} color="#000" weight={2} opacity={0.7} />
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Bird Sightings" checked>
+            <GeoJSON
+              data={birdSightings}
+              pointToLayer={this.sightingPointToLayer}
+              onEachFeature={this.sightingOnEachFeature}
+              attribution="Data: FWF, KCT, KSP"
+            />
+          </LayersControl.Overlay>
+        </LayersControl>
         <ScaleControl />
       </Map>
     );
