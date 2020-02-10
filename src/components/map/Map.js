@@ -62,11 +62,17 @@ class Map extends Component {
             <TileLayer
               attribution="Mapbox"
               url={`https://api.mapbox.com/styles/v1/mapbox/outdoors-v9/tiles/256/{z}/{x}/{y}?access_token=${process.env.REACT_APP_MAPBOX_API_KEY}`}
+              maxZoom={10}
+            />
+            <TileLayer
+              url={`https://tiles-a.data-cdn.linz.govt.nz/services;key=${process.env.REACT_APP_LINZ_API_KEY}/tiles/v4/layer=50798/EPSG:3857/{z}/{x}/{y}.png`}
+              minZoom={10}
+              maxZoom={12}
             />
             <TileLayer
               url={`https://tiles-a.data-cdn.linz.govt.nz/services;key=${process.env.REACT_APP_LINZ_API_KEY}/tiles/v4/layer=50767/EPSG:3857/{z}/{x}/{y}.png`}
-              attribution="LINZ, licensed for reuse under the CC BY 4.0."
-              minZoom={11}
+              attribution="LINZ, licensed for reuse (CC BY 4.0)."
+              minZoom={12}
             />
             {children}
           </LeafletMap>

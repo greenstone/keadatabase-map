@@ -24,3 +24,6 @@ yarn-error.log*
 
 # compiled css
 src/**/*.css
+
+# jsdoc
+/out
