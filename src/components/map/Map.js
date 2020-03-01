@@ -58,21 +58,23 @@ class Map extends Component {
       <>
         {!embed && <Header />}
         <div className={classes}>
-          <LeafletMap className="map" minZoom={7} maxZoom={14} bounds={this.state.bounds}>
+          <LeafletMap className="map" minZoom={6} maxZoom={14} bounds={this.state.bounds}>
             <TileLayer
               attribution="Mapbox"
               url={`https://api.mapbox.com/styles/v1/mapbox/outdoors-v9/tiles/256/{z}/{x}/{y}?access_token=${process.env.REACT_APP_MAPBOX_API_KEY}`}
               maxZoom={10}
             />
             <TileLayer
-              url={`https://tiles-a.data-cdn.linz.govt.nz/services;key=${process.env.REACT_APP_LINZ_API_KEY}/tiles/v4/layer=50798/EPSG:3857/{z}/{x}/{y}.png`}
+              url={`https://tiles-{s}.data-cdn.linz.govt.nz/services;key=${process.env.REACT_APP_LINZ_API_KEY}/tiles/v4/layer=50798/EPSG:3857/{z}/{x}/{y}.png`}
               minZoom={10}
               maxZoom={12}
+              subdomains={'abcd'}
             />
             <TileLayer
-              url={`https://tiles-a.data-cdn.linz.govt.nz/services;key=${process.env.REACT_APP_LINZ_API_KEY}/tiles/v4/layer=50767/EPSG:3857/{z}/{x}/{y}.png`}
+              url={`https://tiles-{s}.data-cdn.linz.govt.nz/services;key=${process.env.REACT_APP_LINZ_API_KEY}/tiles/v4/layer=50767/EPSG:3857/{z}/{x}/{y}.png`}
               attribution="LINZ, licensed for reuse (CC BY 4.0)."
               minZoom={12}
+              subdomains={'abcd'}
             />
             {children}
           </LeafletMap>
