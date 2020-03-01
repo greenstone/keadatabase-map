@@ -3,7 +3,6 @@ import { Map as LeafletMap, TileLayer } from 'react-leaflet';
 import PropTypes from 'prop-types';
 import qs from 'qs';
 import { withRouter } from 'react-router-dom';
-import { latLngBounds } from 'leaflet';
 
 import Header from '../presentation/Header';
 import qsOptions from '../../config/qsOptions';

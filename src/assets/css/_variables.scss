@@ -1,6 +1,8 @@
-@import 'node_modules/bootstrap/scss/functions';
-@import 'node_modules/bootstrap/scss/mixins';
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/mixins';
 
-// Custom variables go here
+$orange-dark: #df5206;
 
-@import 'node_modules/bootstrap/scss/variables';
+$primary: $orange-dark;
+
+@import 'bootstrap/scss/variables';
