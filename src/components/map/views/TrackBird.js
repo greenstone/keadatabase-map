@@ -9,7 +9,7 @@ import { withRouter } from 'react-router-dom';
 import Loader from '../../helpers/Loader';
 import Map from '../Map';
 
-const API_URL = `https://data.keadatabase.nz/geojson/birds/`;
+const API_URL = `${process.env.REACT_APP_API_BASE}/geojson/birds/`;
 
 const defaultPointMarkerOptions = {
   color: '#000',

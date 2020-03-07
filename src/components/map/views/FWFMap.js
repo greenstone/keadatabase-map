@@ -10,7 +10,7 @@ import { FWF_BOUNDS } from '../defaults';
 
 import blocks from '../../../assets/geo/blocks.json';
 
-const API_URL = `https://data.keadatabase.nz/geojson/sightings/`;
+const API_URL = `${process.env.REACT_APP_API_BASE}/geojson/sightings/`;
 
 const fwfPeriods = [
   {

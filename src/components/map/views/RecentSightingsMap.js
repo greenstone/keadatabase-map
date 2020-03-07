@@ -6,7 +6,7 @@ import { GeoJSON, LayersControl, ScaleControl } from 'react-leaflet';
 import Loader from '../../helpers/Loader';
 import Map from '../Map';
 
-const API_URL = `https://data.keadatabase.nz/geojson/sightings/`;
+const API_URL = `${process.env.REACT_APP_API_BASE}/geojson/sightings/`;
 
 const defaultPointMarkerOptions = {
   color: '#000',
