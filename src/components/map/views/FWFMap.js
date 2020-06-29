@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import L from 'leaflet';
 import { connect } from 'react-refetch';
 import { GeoJSON, LayersControl, ScaleControl } from 'react-leaflet';
+import Control from 'react-leaflet-control';
 import moment from 'moment';
 
 import Loader from '../../helpers/Loader';
@@ -49,6 +50,34 @@ const defaultPointMarkerOptions = {
   fillOpacity: 0.8,
 };
 
+const LegendItem = ({ label, markerSize, markerFill }) => (
+  <div className="form-row align-items-center">
+    <dt className="col-6">
+      <svg height={28} width={28}>
+        <g>
+          <circle cx="14" cy="14" r={markerSize} className="marker" fill={markerFill} />
+        </g>
+      </svg>
+    </dt>
+    <dd className="col-6 m-0">{label}</dd>
+  </div>
+);
+
+const Legend = () => (
+  <Control position="bottomright">
+    <div className="legend leaflet-control-layers">
+      <h2 className="sr-only">Legend</h2>
+      <h3>Kea observed</h3>
+      <dl className="m-0">
+        <LegendItem label="10+" markerSize={10} markerFill="#df5206" />
+        <LegendItem label="5–9" markerSize={7} markerFill="#df5206" />
+        <LegendItem label="1–4" markerSize={5} markerFill="#df5206" />
+        <LegendItem label="0" markerSize={5} markerFill="#ffffff" />
+      </dl>
+    </div>
+  </Control>
+);
+
 class FWFMap extends Component {
   blockOnEachFeature(feature, layer) {
     layer.bindTooltip(
@@ -63,8 +92,8 @@ class FWFMap extends Component {
     const pointMarkerOptions = Object.assign({}, defaultPointMarkerOptions);
 
     // Radius based on number
-    if (feature.properties.number > 10) pointMarkerOptions.radius = 10;
-    else if (feature.properties.number > 5 && feature.properties.number <= 10)
+    if (feature.properties.number >= 10) pointMarkerOptions.radius = 10;
+    else if (feature.properties.number >= 5 && feature.properties.number < 10)
       pointMarkerOptions.radius = 7;
     else pointMarkerOptions.radius = 5;
 
@@ -138,6 +167,7 @@ class FWFMap extends Component {
               />
             </LayersControl.Overlay>
           </LayersControl>
+          <Legend />
           <ScaleControl />
         </Map>
       );

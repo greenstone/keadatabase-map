@@ -24,3 +24,20 @@ div.Map {
 .leaflet-control-layers label {
   margin-bottom: 0;
 }
+
+.legend {
+  padding: map-get($spacers, 2);
+
+  h3 {
+    font-size: $font-size-base * 0.8;
+  }
+
+  .marker {
+    stroke: $black;
+    stroke-opacity: 1;
+    stroke-width: 1;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill-opacity: 0.8;
+  }
+}
