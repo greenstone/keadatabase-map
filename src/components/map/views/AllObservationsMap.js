@@ -6,7 +6,7 @@ import { GeoJSON, LayersControl, ScaleControl } from 'react-leaflet';
 import Loader from '../../helpers/Loader';
 import Map from '../Map';
 
-const API_URL = `https://data.keadatabase.nz/geojson/sightings/`;
+const API_URL = `https://data.keadatabase.nz/geojson/observations/`;
 
 const defaultPointMarkerOptions = {
   color: '#000',
@@ -15,8 +15,8 @@ const defaultPointMarkerOptions = {
   fillOpacity: 0.8,
 };
 
-class AllSightingsMap extends Component {
-  sightingPointToLayer(feature, latlng) {
+class AllObservationsMap extends Component {
+  observationPointToLayer(feature, latlng) {
     var pointMarkerOptions = defaultPointMarkerOptions;
 
     // Color based on status
@@ -41,41 +41,41 @@ class AllSightingsMap extends Component {
     return L.circleMarker(latlng, pointMarkerOptions);
   }
 
-  sightingOnEachFeature(feature, layer) {
+  observationOnEachFeature(feature, layer) {
     layer.bindPopup(`
-      <a href="https://keadatabase.nz/sightings/${feature.id}" rel="noopener noreferrer" target="_blank">
+      <a href="https://keadatabase.nz/observations/${feature.id}" rel="noopener noreferrer" target="_blank">
         <strong>${feature.id}</strong>: ${feature.properties.get_sighting_type_display} ${feature.properties.number} on ${feature.properties.date_sighted}
       </a>
     `);
   }
 
   render() {
-    const { publicSightingsFetch, newSightingsFetch } = this.props;
+    const { publicObservationsFetch, newObservationsFetch } = this.props;
 
-    const allFetches = PromiseState.all([publicSightingsFetch, newSightingsFetch]);
+    const allFetches = PromiseState.all([publicObservationsFetch, newObservationsFetch]);
 
     if (allFetches.pending) {
       return <Loader />;
     } else if (allFetches.rejected) {
       return <span>Error</span>;
     } else if (allFetches.fulfilled) {
-      const [publicSightings, newSightings] = allFetches.value;
+      const [publicObservations, newObservations] = allFetches.value;
       return (
         <Map>
           <LayersControl position="topright" collapsed={false}>
-            <LayersControl.Overlay name="Public Sightings" checked>
+            <LayersControl.Overlay name="Public Observations" checked>
               <GeoJSON
-                data={publicSightings}
-                pointToLayer={this.sightingPointToLayer}
-                onEachFeature={this.sightingOnEachFeature}
+                data={publicObservations}
+                pointToLayer={this.observationPointToLayer}
+                onEachFeature={this.observationOnEachFeature}
                 attribution="Data: KSP, KCT"
               />
             </LayersControl.Overlay>
-            <LayersControl.Overlay name="New Sightings" checked>
+            <LayersControl.Overlay name="New Observations" checked>
               <GeoJSON
-                data={newSightings}
-                pointToLayer={this.sightingPointToLayer}
-                onEachFeature={this.sightingOnEachFeature}
+                data={newObservations}
+                pointToLayer={this.observationPointToLayer}
+                onEachFeature={this.observationOnEachFeature}
               />
             </LayersControl.Overlay>
           </LayersControl>
@@ -87,6 +87,6 @@ class AllSightingsMap extends Component {
 }
 
 export default connect(props => ({
-  publicSightingsFetch: `${API_URL}?status=public&page_size=10000`,
-  newSightingsFetch: `${API_URL}?status=new&page_size=10000`,
-}))(AllSightingsMap);
+  publicObservationsFetch: `${API_URL}?status=public&page_size=10000`,
+  newObservationsFetch: `${API_URL}?status=new&page_size=10000`,
+}))(AllObservationsMap);
