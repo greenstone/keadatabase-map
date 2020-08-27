@@ -9,7 +9,7 @@ import { withRouter } from 'react-router-dom';
 import Loader from '../../helpers/Loader';
 import Map from '../Map';
 
-const API_URL = `${process.env.REACT_APP_API_BASE}/geojson/birds/`;
+const API_URL = `${process.env.REACT_APP_API_BASE}/geojson/bird_observations/`;
 
 const defaultPointMarkerOptions = {
   color: '#000',
@@ -21,23 +21,23 @@ const defaultPointMarkerOptions = {
 };
 
 class BirdMap extends Component {
-  sightingPointToLayer(feature, latlng) {
+  observationPointToLayer(feature, latlng) {
     const pointMarkerOptions = Object.assign({}, defaultPointMarkerOptions);
     return L.circleMarker(latlng, pointMarkerOptions);
   }
 
-  sightingOnEachFeature(feature, layer) {
+  observationOnEachFeature(feature, layer) {
     layer.bindPopup(`
-      <a href="https://keadatabase.nz/sightings/${feature.properties.sighting}" rel="noopener noreferrer" target="_blank">
+      <a href="https://keadatabase.nz/observations/${feature.properties.sighting}" rel="noopener noreferrer" target="_blank">
         <strong>${feature.properties.sighting__date_sighted}</strong> (#${feature.properties.sighting})
       </a>
     `);
   }
 
   render() {
-    const { birdSightings } = this.props;
-    const birdTrace = birdSightings.features.map(birdSighting =>
-      LeafletGeoJSON.coordsToLatLng(birdSighting.geometry.coordinates)
+    const { birdObservations } = this.props;
+    const birdTrace = birdObservations.features.map(birdObservation =>
+      LeafletGeoJSON.coordsToLatLng(birdObservation.geometry.coordinates)
     );
 
     return (
@@ -46,11 +46,11 @@ class BirdMap extends Component {
           <LayersControl.Overlay name="Paths">
             <Polyline positions={birdTrace} color="#000" weight={2} opacity={0.7} />
           </LayersControl.Overlay>
-          <LayersControl.Overlay name="Bird Sightings" checked>
+          <LayersControl.Overlay name="Bird Observations" checked>
             <GeoJSON
-              data={birdSightings}
-              pointToLayer={this.sightingPointToLayer}
-              onEachFeature={this.sightingOnEachFeature}
+              data={birdObservations}
+              pointToLayer={this.observationPointToLayer}
+              onEachFeature={this.observationOnEachFeature}
               attribution="Data: FWF, KCT, KSP"
             />
           </LayersControl.Overlay>
@@ -66,21 +66,22 @@ class TrackBird extends Component {
     const queryString = this.props.location.search ? this.props.location.search : '';
 
     // Check that the queryString has a bird specified—not foolproof, but good enough for this purpose
-    if (queryString && queryString.includes('bird')) this.props.lazyFetchBirdSightings(queryString);
+    if (queryString && queryString.includes('bird'))
+      this.props.lazyFetchBirdObservations(queryString);
   }
 
   render() {
-    if (this.props.birdSightingsFetch) {
-      const { birdSightingsFetch } = this.props;
+    if (this.props.birdObservationsFetch) {
+      const { birdObservationsFetch } = this.props;
 
-      if (birdSightingsFetch.pending) {
+      if (birdObservationsFetch.pending) {
         return <Loader />;
-      } else if (birdSightingsFetch.rejected) {
+      } else if (birdObservationsFetch.rejected) {
         return <span>Error</span>;
-      } else if (birdSightingsFetch.fulfilled) {
-        const birdSightings = birdSightingsFetch.value;
+      } else if (birdObservationsFetch.fulfilled) {
+        const birdObservations = birdObservationsFetch.value;
 
-        return <BirdMap birdSightings={birdSightings} />;
+        return <BirdMap birdObservations={birdObservations} />;
       }
     } else return <span>No parameters specified.</span>;
   }
@@ -92,8 +93,8 @@ TrackBird.propTypes = {
 
 export default withRouter(
   connect(props => ({
-    lazyFetchBirdSightings: queryString => ({
-      birdSightingsFetch: `${API_URL}${queryString}`,
+    lazyFetchBirdObservations: queryString => ({
+      birdObservationsFetch: `${API_URL}${queryString}`,
     }),
   }))(TrackBird)
 );

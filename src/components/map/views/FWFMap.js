@@ -11,7 +11,7 @@ import { FWF_BOUNDS } from '../defaults';
 
 import blocks from '../../../assets/geo/blocks.json';
 
-const API_URL = `${process.env.REACT_APP_API_BASE}/geojson/sightings/`;
+const API_URL = `${process.env.REACT_APP_API_BASE}/geojson/observations/`;
 
 const fwfPeriods = [
   {
@@ -88,7 +88,7 @@ class FWFMap extends Component {
     );
   }
 
-  sightingPointToLayer(feature, latlng) {
+  observationPointToLayer(feature, latlng) {
     const pointMarkerOptions = Object.assign({}, defaultPointMarkerOptions);
 
     // Radius based on number
@@ -103,13 +103,13 @@ class FWFMap extends Component {
     return L.circleMarker(latlng, pointMarkerOptions);
   }
 
-  sightingOnEachFeature(feature, layer) {
+  observationOnEachFeature(feature, layer) {
     // Period based on date_sighted
-    const period = (function(sightingDate) {
-      const sightingDateParsed = moment(sightingDate, momentParse).year('0000');
+    const period = (function(observationDate) {
+      const observationDateParsed = moment(observationDate, momentParse).year('0000');
 
       return fwfPeriods.reduce((accumulator, currentValue) => {
-        return moment(sightingDateParsed).isBetween(
+        return moment(observationDateParsed).isBetween(
           currentValue.start,
           currentValue.end,
           'day',
@@ -120,7 +120,7 @@ class FWFMap extends Component {
       });
     })(feature.properties.date_sighted);
 
-    // Sighting year
+    // Observation year
     const year = moment(feature.properties.date_sighted).year();
 
     // Create date/period string
@@ -128,21 +128,21 @@ class FWFMap extends Component {
       feature.properties.date_sighted} ${period.id ? year : ''}`;
 
     layer.bindPopup(`
-      <a href="https://keadatabase.nz/sightings/${feature.id}" rel="noopener noreferrer" target="_blank">
+      <a href="https://keadatabase.nz/observations/${feature.id}" rel="noopener noreferrer" target="_blank">
         <strong>${feature.id}</strong>: ${feature.properties.get_sighting_type_display} ${feature.properties.number} ${dateString}
       </a>
     `);
   }
 
   render() {
-    const { fwfSightingsFetch } = this.props;
+    const { fwfObservationsFetch } = this.props;
 
-    if (fwfSightingsFetch.pending) {
+    if (fwfObservationsFetch.pending) {
       return <Loader />;
-    } else if (fwfSightingsFetch.rejected) {
+    } else if (fwfObservationsFetch.rejected) {
       return <span>Error</span>;
-    } else if (fwfSightingsFetch.fulfilled) {
-      const fwfSightings = fwfSightingsFetch.value;
+    } else if (fwfObservationsFetch.fulfilled) {
+      const fwfObservations = fwfObservationsFetch.value;
       return (
         <Map bounds={FWF_BOUNDS}>
           <LayersControl position="topright" collapsed={false}>
@@ -158,11 +158,11 @@ class FWFMap extends Component {
                 onEachFeature={this.blockOnEachFeature}
               />
             </LayersControl.Overlay>
-            <LayersControl.Overlay name="FWF Sightings" checked>
+            <LayersControl.Overlay name="FWF Observations" checked>
               <GeoJSON
-                data={fwfSightings}
-                pointToLayer={this.sightingPointToLayer}
-                onEachFeature={this.sightingOnEachFeature}
+                data={fwfObservations}
+                pointToLayer={this.observationPointToLayer}
+                onEachFeature={this.observationOnEachFeature}
                 attribution="Data: FWF, KCT, KSP"
               />
             </LayersControl.Overlay>
@@ -176,5 +176,5 @@ class FWFMap extends Component {
 }
 
 export default connect(props => ({
-  fwfSightingsFetch: `${API_URL}?status=fwf&page_size=10000`,
+  fwfObservationsFetch: `${API_URL}?status=fwf&page_size=10000`,
 }))(FWFMap);

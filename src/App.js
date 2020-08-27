@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
-import RecentSightingsMap from './components/map/views/RecentSightingsMap';
+import RecentObservationsMap from './components/map/views/RecentObservationsMap';
 import FWFMap from './components/map/views/FWFMap';
 import TrackBird from './components/map/views/TrackBird';
 import HelpPage from './views/help';
@@ -16,7 +16,7 @@ const App = () => {
       <div className="App">
         <Switch>
           <Route exact path="/">
-            <RecentSightingsMap />
+            <RecentObservationsMap />
           </Route>
           <Route exact path="/fwf">
             <FWFMap />
