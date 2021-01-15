@@ -28,8 +28,8 @@ class BirdMap extends Component {
 
   observationOnEachFeature(feature, layer) {
     layer.bindPopup(`
-      <a href="https://keadatabase.nz/observations/${feature.properties.sighting}" rel="noopener noreferrer" target="_blank">
-        <strong>${feature.properties.sighting__date_sighted}</strong> (#${feature.properties.sighting})
+      <a href="https://keadatabase.nz/observations/${feature.properties.sighting.id}" rel="noopener noreferrer" target="_blank">
+        <strong>${feature.properties.sighting.date_sighted}</strong> (#${feature.properties.sighting.id})
       </a>
     `);
   }
